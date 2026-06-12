@@ -38,6 +38,7 @@ const questions: Question[] = [
       "ChatGPT 無料版",
       "ChatGPT 有料版",
       "Claude",
+      "Claude 有料版",
       "Gemini",
       "Google AI Studio",
       "Manus",
@@ -148,6 +149,30 @@ const questions: Question[] = [
 ];
 
 const routes: Record<string, RouteResult> = {
+  hybrid: {
+    id: "hybrid",
+    name: "Claude Code × Codex ハイブリッドコース",
+    eyebrow: "両方の強みを使い分ける",
+    explanation:
+      "Claude Codeを制作の基盤にし、Codexを画像生成や見た目の確認に活用して、完成度の高いページやアプリを素早く作るルートです。",
+    tools: ["Claude Code", "Codex", "Next.js", "GitHub + Vercel"],
+    firstVersion: "参考画像をもとに、構成・文章・見た目を整えた1ページのLPやポートフォリオ",
+    difficult: ["複数ツール間で指示を揃えること", "参考画像の完全な再現", "生成物の権利・内容・表示崩れの確認"],
+    nextStep: "Claude CodeでLPの目的・構成・文章・Next.js実装を進め、必要な画像と見た目の確認をCodexへ依頼しましょう。",
+    supportNote: "役割を分けると速く進みます。Claude Codeを全体の進行役にし、Codexには画像や視覚的な調整を具体的に依頼しましょう。",
+  },
+  fast: {
+    id: "fast",
+    name: "Claude・有料AIで爆速コース",
+    eyebrow: "AIと一緒に最短で形に",
+    explanation:
+      "Claudeのアプリ作成機能や有料AIの長い対話・ファイル支援を活かし、企画から動く試作品まで一気に進めるルートです。",
+    tools: ["Claude Artifacts", "Claude 有料版 / ChatGPT 有料版", "GitHub + Vercel"],
+    firstVersion: "Claude上でその場で動かして試せる、診断・クイズ・カウンターなどの小さなWebアプリ",
+    difficult: ["要望を一度に詰め込みすぎること", "AIの提案を確認せず公開すること", "ログイン・決済などの安全確認"],
+    nextStep: "Claudeに「初心者向けに、まず動く小さなアプリを作って」と伝え、作りたいものと必要な機能を1つずつ追加しましょう。",
+    supportNote: "Claude無料版でも小さな試作はできます。有料版は利用量が多く、長い相談や繰り返しの修正を進めやすくなります。",
+  },
   smartphone: {
     id: "smartphone",
     name: "スマホでかんたん試作ルート",
@@ -228,6 +253,14 @@ function diagnose(answers: Answers) {
     answers.goal?.includes("販売したい")
   ) {
     matches.push("caution");
+  }
+  if (
+    answers.aiTools?.includes("ChatGPT 有料版") &&
+    answers.aiTools?.includes("Claude 有料版")
+  ) {
+    matches.push("hybrid");
+  } else if (includesAny(answers.aiTools, ["ChatGPT 有料版", "Claude", "Claude 有料版"])) {
+    matches.push("fast");
   }
   if (includesAny(answers.project, homepageProjects)) matches.push("homepage");
   if (includesAny(answers.project, aiProjects) || answers.features?.includes("画像生成")) {

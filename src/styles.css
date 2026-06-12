@@ -375,6 +375,14 @@ button:focus-visible {
   background: #5a657e;
 }
 
+.result-hero.fast {
+  background: linear-gradient(135deg, #31755d, #526e96);
+}
+
+.result-hero.hybrid {
+  background: linear-gradient(135deg, #695348, #465f7f);
+}
+
 .result-hero .eyebrow {
   color: rgba(255, 255, 255, 0.68);
 }
